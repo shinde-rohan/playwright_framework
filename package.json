@@ -1,0 +1,8 @@
+{
+  "name": "playwrightframework",
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
