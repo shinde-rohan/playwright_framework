@@ -1,5 +1,6 @@
 
 import { productPageLocators } from "../locators/ProductPageLocators"
+import { expect } from '@playwright/test';
 
 export class ProductPage {
     constructor(page) {
@@ -35,13 +36,14 @@ export class ProductPage {
         await this.page.locator(productPageLocators.addToCartButton).first().click()
     }
     async addAllProductsToCart() {
-        const buttons = this.page.locator(productPageLocators.addToCartButton)
-        const count = await buttons.count()
-        console.log("count is " + count)
+        const buttons = this.page.locator("button.btn_inventory");
+        const count = await buttons.count();
+        console.log("Found buttons:", count);
+
         for (let i = 0; i < count; i++) {
             const button = buttons.nth(i);
-            // only click if it's still "Add to cart"
-            if (await button.textContent() === "Add to cart") {
+            const text = await button.innerText();
+            if (text.trim() === "Add to cart") {
                 await button.click();
             }
         }
@@ -63,81 +65,71 @@ export class ProductPage {
         }
     }
 
-    async filterByNameAtoZ()
-    {
-        await this.page.selectOption(productPageLocators.filterDropDown,"az")
+    async filterByNameAtoZ() {
+        await this.page.selectOption(productPageLocators.filterDropDown, "az")
     }
-    async filterByNameZtoA()
-    {
-        await this.page.selectOption(productPageLocators.filterDropDown,"za")
+    async filterByNameZtoA() {
+        await this.page.selectOption(productPageLocators.filterDropDown, "za")
     }
-    async filterByPriceLoToHi()
-    {
-        await this.page.selectOption(productPageLocators.filterDropDown,"lohi")
+    async filterByPriceLoToHi() {
+        await this.page.selectOption(productPageLocators.filterDropDown, "lohi")
     }
-    async filterByPriceHiToLo()
-    {
-        await this.page.selectOption(productPageLocators.filterDropDown,"hilo")
+    async filterByPriceHiToLo() {
+        await this.page.selectOption(productPageLocators.filterDropDown, "hilo")
     }
 
-    async getProductNames()
-    {
+    async getProductNames() {
         return await this.page.locator(productPageLocators.productNames).allTextContents()
     }
 
-    async getProductPrices()
-    {
-        const prices =  await this.page.locator(productPageLocators.productPrices).allTextContents()
-        return prices.map(price =>parseFloat(price.replace('$','')))
+    async getProductPrices() {
+        const prices = await this.page.locator(productPageLocators.productPrices).allTextContents()
+        return prices.map(price => parseFloat(price.replace('$', '')))
     }
 
-    async clickOnCartLink()
-    {
+    async clickOnCartLink() {
         await this.page.locator(productPageLocators.cartLink).click()
     }
 
-    async getFirstProdcutDetails()
-    {
+    async getFirstProdcutDetails() {
         const name = await this.page.locator(productPageLocators.productNames).first().textContent()
         const description = await this.page.locator(productPageLocators.productDescription).first().textContent()
         const price = await this.page.locator(productPageLocators.productPrices).first().textContent()
 
-        return{
-            name:name?.trim(),
-            description:description?.trim(),
-            price:price?.trim()
+        return {
+            name: name?.trim(),
+            description: description?.trim(),
+            price: price?.trim()
         }
     }
 
-    async getAllProdcutDetails()
-    {
+    async getAllProdcutDetails() {
         const allName = await this.page.locator(productPageLocators.productNames).allTextContents()
         const allDesc = await this.page.locator(productPageLocators.productDescription).allTextContents()
         const allPrices = await this.page.locator(productPageLocators.productPrices).allTextContents()
 
-        const allProducts = allName.map((__,i)=>
+        const allProducts = allName.map((__, i) =>
         ({
-            name : allName[i].trim(),
-            description : allDesc[i].trim(),
-            price : allPrices[i].trim()
+            name: allName[i].trim(),
+            description: allDesc[i].trim(),
+            price: allPrices[i].trim()
         }))
 
         return allProducts
     }
 
-    async getSpecificProdcutDetails(productName)
-    {
+    async getSpecificProdcutDetails(productName) {
         const allName = await this.page.locator(productPageLocators.productNames).allTextContents()
         const allDesc = await this.page.locator(productPageLocators.productDescription).allTextContents()
         const allPrices = await this.page.locator(productPageLocators.productPrices).allTextContents()
 
-        const allProducts = allName.map((__,i)=>
+        const allProducts = allName.map((__, i) =>
         ({
-            name : allName[i].trim(),
-            description : allDesc[i].trim(),
-            price : allPrices[i].trim()
+            name: allName[i].trim(),
+            description: allDesc[i].trim(),
+            price: allPrices[i].trim()
         }))
 
-        return allProducts.filter(p=>productName.includes(p.name))
+        return allProducts.filter(p => productName.includes(p.name))
     }
 }

@@ -35,8 +35,12 @@ test.describe("Product page validation", ()=>{
         await productPage.addAllProductsToCart()
     })
 
-    test("Add specific product",async ({page})=>{
+    test.only("Add specific product",async ({page})=>{
         await productPage.addSpecificProductsToCart(productsToCart)
+        
+    })
+    test("Add all product",async ({page})=>{
+        await productPage.addAllProductsToCart()
         
     })
 
@@ -58,7 +62,7 @@ test.describe("Product page validation", ()=>{
         const sorted = [...prices].sort((a,b)=>a-b)
         await expect(prices).toEqual(sorted)
     })
-    test.only("Filter by High to Low",async()=>{
+    test("Filter by High to Low",async()=>{
         await productPage.filterByPriceHiToLo()
         const prices = await productPage.getProductPrices()
         const sorted = [...prices].sort((a,b)=>b-a)
