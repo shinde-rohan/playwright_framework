@@ -6,7 +6,7 @@ export const productPageLocators = {
     productNames : ".inventory_item_name ",
     productDescription : ".inventory_item_desc",
     productPrices : ".inventory_item_price",
-    addToCartButton : "//button[@class='btn btn_primary btn_small btn_inventory ']",
+    addToCartButton : "//button[contains(@class,'btn_inventory')]",
     filterDropDown : ".product_sort_container",
     filterNameAtoZ : "option[value='az']",
     filterNameZtoA : "option[value='za']",
